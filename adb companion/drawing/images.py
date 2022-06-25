@@ -1,0 +1,12 @@
+import pgerom as pe
+from os import path
+
+dir = 'resources'
+
+def load(name):
+    imagepath = path.join(dir, name)
+    return pe.image(imagepath)
+
+images = {
+    'waitplug': load('waitplug.png')
+}
