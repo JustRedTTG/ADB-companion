@@ -1,5 +1,5 @@
 from subprocess import Popen, PIPE
-
+import connector.buttons as buttons
 ADB = 0
 FASTBOOT = 1
 
@@ -25,7 +25,8 @@ def fixformat(text:bytes, maxFIX:bool = False):
             final += line + '\n'
         if len(final) > 1:
             return final[0:len(final)-1]
-        return text.splitlines()[0]
+        try: return text.splitlines()[0]
+        except: return text
     return text
 def fixvalue(value:str):
     try:
@@ -51,18 +52,21 @@ def fastboot(*args):
 class Phone:
     def __init__(self, info):
         self.id, self.mode = info.split('	')
+        self.textbox = None
         if self.mode in ADB_MODES:
-            self.getInfo()
-            self.brand = self.info['ro.product.brand']
             try:
-                self.name = self.info['ro.build.product']
-                if self.brand not in self.name:
-                    return 1/0
-            except:
+                self.getInfo()
+                self.brand = self.info['ro.product.brand']
                 try:
-                    self.name = self.info['ro.product.model']
+                    self.name = self.info['ro.build.product']
+                    if self.brand not in self.name: return 1/0
                 except:
-                    self.name = self.id
+                    try: self.name = self.info['ro.product.model']
+                    except: self.name = self.id
+            except:
+                self.info = None
+                self.brand = 'Unknown'
+                self.name = self.id
         else:
             self.info = None
             self.brand = 'Unknown'
@@ -113,9 +117,9 @@ def check_connections(mode=ADB):
     if mode == ADB:
         items = adb('devices').splitlines()
         del items[0]
+        del items[len(items) - 1]
     elif mode == FASTBOOT:
         items = fastboot('devices').splitlines()
-    del items[len(items)-1]
     phones = []
     for phone in items:
         phones.append(Phone(fixformat(phone)))

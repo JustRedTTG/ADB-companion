@@ -8,5 +8,7 @@ def load(name):
     return pe.image(imagepath)
 
 images = {
-    'waitplug': load('waitplug.png')
+    'waitplug': load('waitplug.png'),
+    'phone_adb': load('phone_adb.png'),
+    'phone_fastboot': load('phone_fastboot.png')
 }
