@@ -7,6 +7,8 @@ bootables = {}
 font = 'freesansbold.ttf'
 
 def init_texts(SS):
+    texts['shutdown'] = pe.text.make("Power off.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
+    texts['reboot'] = pe.text.make("Restart.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
     texts['bootloader'] = pe.text.make("Bootloader.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
     texts['recovery'] = pe.text.make("Recovery.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
     texts['unlockboot'] = pe.text.make("Unlock bootloader", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
