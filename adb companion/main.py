@@ -30,7 +30,7 @@ def onlineCheck(ret=False):
 
 # Make folders
 if not os.path.exists('user/'): os.mkdir('user/')
-if not os.path.exists('user/twrp/'): os.mkdir('user/twrp/')
+if not os.path.exists('user/flash/'): os.mkdir('user/flash/')
 #
 
 while True:
@@ -68,6 +68,7 @@ while True:
                 surface.blit(phone.texts[text], (x, y))
                 y += phone.texts[text].get_height() + 5
             phone.textbox = surface
+        if not os.path.exists(f'user/flash/{phone.id}'): os.mkdir(f'user/flash/{phone.id}')
 
         screen += 2
     elif screen == 3:
@@ -95,6 +96,11 @@ while True:
             pe.button.rect((x, y, texts[item].get_width() + 6, texts[item].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.fastboot[item])
             pe.display.blit.rect(texts[item], (x + 3, y + 3))
             y += texts[item].get_height() + 8
+        x, y = screenSize[0]-screenSize[0]/3.5, 50
+        for item in list(bootables):
+            pe.button.rect((x, y, texts[f'boot {item}'].get_width() + 6, texts[f'boot {item}'].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'boot {bootables[item]}')
+            pe.display.blit.rect(texts[f'boot {item}'], (x + 3, y + 3))
+            y += texts[f'boot {item}'].get_height() + 8
 
         details(phone)
         onlineCheck()
