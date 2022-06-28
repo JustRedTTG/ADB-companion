@@ -1,5 +1,4 @@
 adb = {
-    'shutdown':'shutdown',
     'reboot':'reboot',
     'bootloader':'reboot bootloader',
     'recovery':'reboot recovery'
