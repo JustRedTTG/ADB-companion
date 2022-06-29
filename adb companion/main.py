@@ -49,6 +49,7 @@ while True:
                 phone.texts['name'] = pe.text.make(phone.name, font, int(screenSize[0]/30), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
                 phone.texts['brand'] = pe.text.make(phone.brand, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
                 phone.texts['mode'] = pe.text.make(phone.mode, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
+            init_texts(screenSize, phones[currentPhone].id)
             if phones[currentPhone].mode in ADB_MODES:
                 screen = 1
             elif phones[currentPhone].mode in FASTBOOT_MODES:
@@ -82,6 +83,11 @@ while True:
             pe.button.rect((x, y, texts[item].get_width()+6, texts[item].get_height()+6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.adb[item])
             pe.display.blit.rect(texts[item], (x + 3, y + 3))
             y += texts[item].get_height()+8
+        x, y = screenSize[0] - screenSize[0] / 3, 50
+        for item in list(flashables):
+            pe.button.rect((x, y, texts[f'push {item}'].get_width() + 6, texts[f'push {item}'].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'push {flashables[item]} /sdcard/')
+            pe.display.blit.rect(texts[f'push {item}'], (x + 3, y + 3))
+            y += texts[f'push {item}'].get_height() + 8
 
         details(phone)
         onlineCheck()
@@ -96,7 +102,7 @@ while True:
             pe.button.rect((x, y, texts[item].get_width() + 6, texts[item].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.fastboot[item])
             pe.display.blit.rect(texts[item], (x + 3, y + 3))
             y += texts[item].get_height() + 8
-        x, y = screenSize[0]-screenSize[0]/3.5, 50
+        x, y = screenSize[0]-screenSize[0]/3, 50
         for item in list(bootables):
             pe.button.rect((x, y, texts[f'boot {item}'].get_width() + 6, texts[f'boot {item}'].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'boot {bootables[item]}')
             pe.display.blit.rect(texts[f'boot {item}'], (x + 3, y + 3))

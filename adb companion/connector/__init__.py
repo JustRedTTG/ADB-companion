@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 import connector.buttons as buttons
+from drawing.CDP import Halt
 ADB = 0
 FASTBOOT = 1
 
@@ -28,6 +29,21 @@ def fixformat(text:bytes, maxFIX:bool = False):
         try: return text.splitlines()[0]
         except: return text
     return text
+
+def get_args(value:str):
+    args = []
+    arg = ''
+    string_mode = False
+    for letter in value:
+        if letter == '"': string_mode = not string_mode
+        elif string_mode: arg += letter
+        elif not string_mode and letter == ' ':
+            args.append(arg)
+            arg = ''
+        else: arg += letter
+    args.append(arg)
+    return args
+
 def fixvalue(value:str):
     try:
         return int(value)
@@ -78,10 +94,16 @@ class Phone:
             return fastboot('-s', self.id, *args)
         else:
             return 'ERROR'
-    def command(self, text:str):
-        return fixformat(self.commandw(*text.split(' ')), 2)
+    def command(self, text:str, user:bool=True):
+        if user:
+            program = Halt(text)
+            program.run()
+        ret = fixformat(self.commandw(*get_args(text)), 2)
+        if user:
+            program.stop()
+        return ret
     def getInfo(self):
-        preinfo = self.command('shell getprop').splitlines()
+        preinfo = self.command('shell getprop', False).splitlines()
         self.info = {}
         key, value = '', []
         point = 0
