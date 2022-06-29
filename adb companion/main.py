@@ -106,14 +106,11 @@ while True:
             pe.button.rect((x, y, texts[item].get_width() + 6, texts[item].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.fastboot[item])
             pe.display.blit.rect(texts[item], (x + 3, y + 3))
             y += texts[item].get_height() + 8
-        files = phone.list_files('/sdcard/', False)
         x, y = screenSize[0]-screenSize[0]/3, 50
         for item in list(bootables):
             rect = (x, y, texts[f'boot {item}'].get_width() + 6, texts[f'boot {item}'].get_height() + 6)
             pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'boot {bootables[item]}')
             pe.display.blit.rect(texts[f'boot {item}'], (x + 3, y + 3))
-            if f'/sdcard/{item}' in files:
-                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"/sdcard/{item}"')
             y += texts[f'boot {item}'].get_height() + 8
 
         details(phone)
