@@ -1,3 +1,4 @@
+import os
 from subprocess import Popen, PIPE
 import connector.buttons as buttons
 from drawing.CDP import Halt
@@ -132,6 +133,25 @@ class Phone:
     def debugInfo(phone):
         for item in list(phone.info):
             print(f'{item} : {phone.info[item]}')
+    def ls(self, directory, user:bool=True):
+        result = self.command(f'shell ls -1 -S -p -r {directory}', user).splitlines()
+        for i in range(len(result)): result[i] = result[i].replace('\\', '')
+
+        return result
+    def list_files(self, directory, user:bool=True):
+        result = self.ls(directory, user)
+        final = []
+        for item in result:
+            if not item.endswith('/'): final.append(os.path.join(directory, item))
+        return final
+    def list_directories(self, directory, user:bool=True):
+        result = self.ls(directory, user)
+        final = []
+        for item in result:
+            if item.endswith('/'): final.append(os.path.join(directory, item))
+        return final
+    def delete_file(self, file, user:bool=True):
+        self.command(f'shell rm {file}', user)
 
 
 
