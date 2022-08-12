@@ -10,6 +10,7 @@ init_texts(screenSize)
 phones = []
 screen = 0
 currentPhone = 0
+SDUNIT = '/sdcard/'
 
 def details(phone):
     if phone.textbox:
@@ -17,6 +18,9 @@ def details(phone):
             screenSize[0] / 2 - phone.textbox.get_width() / 2,
             screenSize[1] - screenSize[1] / 4 - phone.textbox.get_width() / 2,
         ))
+def SETSDUNIT(newunit):
+	global SDUNIT
+	SDUNIT = newunit
 def onlineCheck(ret=False):
     global screen
     temp = check_connections(ADB)
@@ -77,20 +81,32 @@ while True:
 
         centered_box(images['phone_adb'].rect, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
         centered_image(images['phone_adb'])
+	
+        # Control SD UNIT
 
+        x, y = screenSize[0] - screenSize[0] / 3, 50
+
+        pe.button.rect((x, y, texts['SDUNIT_/'].get_width()+6, texts['SDUNIT_/'].get_height()+6), colorpallet['foreground-active'] if SDUNIT == '/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/')
+        pe.display.blit.rect(texts['SDUNIT_/'], (x + 3, y + 3))
+        x += texts['SDUNIT_/'].get_width() + 8
+        pe.button.rect((x, y, texts['SDUNIT_/SD'].get_width()+6, texts['SDUNIT_/SD'].get_height()+6), colorpallet['foreground-active'] if SDUNIT == '/sdcard/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/sdcard/')
+        pe.display.blit.rect(texts['SDUNIT_/SD'], (x + 3, y + 3))
+
+        #
+	
         x, y = 50, 50
         for item in list(buttons.adb):
             pe.button.rect((x, y, texts[item].get_width()+6, texts[item].get_height()+6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.adb[item])
             pe.display.blit.rect(texts[item], (x + 3, y + 3))
             y += texts[item].get_height()+8
-        files = phone.list_files('/sdcard/', False)
-        x, y = screenSize[0] - screenSize[0] / 3, 50
+        files = phone.list_files(SDUNIT, False)
+        x, y = screenSize[0] - screenSize[0] / 3, 75
         for item in list(flashables):
             rect = (x, y, texts[f'push {item}'].get_width() + 6, texts[f'push {item}'].get_height() + 6)
-            pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'push {flashables[item]} /sdcard/')
+            pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'push {flashables[item]} {SDUNIT}')
             pe.display.blit.rect(texts[f'push {item}'], (x + 3, y + 3))
-            if f'/sdcard/{item}' in files:
-                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"/sdcard/{item}"')
+            if f'{SDUNIT}{item}' in files:
+                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
             y += texts[f'push {item}'].get_height() + 8
 
         details(phone)
