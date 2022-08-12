@@ -1,4 +1,4 @@
-import pgerom as pe
+import pygameextra as pe
 from os import path
 
 dir = 'resources'

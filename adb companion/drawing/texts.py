@@ -1,5 +1,5 @@
 import os
-import pgerom as pe
+import pygameextra as pe
 from drawing.colorpallet import colorpallet
 
 texts = {}

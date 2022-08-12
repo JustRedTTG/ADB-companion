@@ -1,4 +1,4 @@
-import pgerom as pe
+import pygameextra as pe
 pe.init()
 
 screenSize = (800, 600)
