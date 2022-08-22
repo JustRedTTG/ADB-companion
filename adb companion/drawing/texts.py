@@ -5,6 +5,7 @@ from drawing.colorpallet import colorpallet
 texts = {}
 bootables = {}
 flashables = {}
+installables = {}
 font = 'freesansbold.ttf'
 
 def remove_ext(file:str, repl:str = ''):
@@ -16,6 +17,7 @@ def init_texts(SS, using_id=None):
     texts.clear()
     bootables.clear()
     flashables.clear()
+    installables.clear()
     texts['reboot'] = pe.text.make("Restart.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
     texts['bootloader'] = pe.text.make("Bootloader.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
     texts['recovery'] = pe.text.make("Recovery.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
@@ -34,6 +36,10 @@ def init_texts(SS, using_id=None):
             if file.endswith('.zip'):
                 texts[f'push {file}'] = pe.text.make(f"Push {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
                 flashables[file] = f'"user/flash/{phone}/{file}"'
+                continue
+            elif file.endswith('.apk'):
+                texts[f'install {file}'] = pe.text.make(f"Install {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
+                installables[file] = f'"user/flash/{phone}/{file}"'
                 continue
             elif not file.endswith('.img'): continue
             #texts[f'flash {file}'] = pe.text.make(f"Flash {file}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto

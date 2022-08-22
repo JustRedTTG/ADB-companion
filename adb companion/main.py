@@ -86,10 +86,10 @@ while True:
 
         x, y = screenSize[0] - screenSize[0] / 3, 50
 
-        pe.button.rect((x, y, texts['SDUNIT_/'].get_width()+6, texts['SDUNIT_/'].get_height()+6), colorpallet['foreground-active'] if SDUNIT == '/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/')
+        pe.button.rect((x, y, texts['SDUNIT_/'].get_width()+6, texts['SDUNIT_/'].get_height()+6), colorpallet['foreground-veryactive'] if SDUNIT == '/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/')
         pe.display.blit.rect(texts['SDUNIT_/'], (x + 3, y + 3))
         x += texts['SDUNIT_/'].get_width() + 8
-        pe.button.rect((x, y, texts['SDUNIT_/SD'].get_width()+6, texts['SDUNIT_/SD'].get_height()+6), colorpallet['foreground-active'] if SDUNIT == '/sdcard/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/sdcard/')
+        pe.button.rect((x, y, texts['SDUNIT_/SD'].get_width()+6, texts['SDUNIT_/SD'].get_height()+6), colorpallet['foreground-veryactive'] if SDUNIT == '/sdcard/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/sdcard/')
         pe.display.blit.rect(texts['SDUNIT_/SD'], (x + 3, y + 3))
 
         #
@@ -108,6 +108,15 @@ while True:
             if f'{SDUNIT}{item}' in files:
                 pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
             y += texts[f'push {item}'].get_height() + 8
+        pe.draw.line(colorpallet['redline'], (x, y), (screenSize[0], y), 1)
+        y += 8
+        for item in list(installables):
+            rect = (x, y, texts[f'install {item}'].get_width() + 6, texts[f'install {item}'].get_height() + 6)
+            pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'install {installables[item]}')
+            pe.display.blit.rect(texts[f'install {item}'], (x + 3, y + 3))
+            if f'{SDUNIT}{item}' in files:
+                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
+            y += texts[f'install {item}'].get_height() + 8
 
         details(phone)
         onlineCheck()
