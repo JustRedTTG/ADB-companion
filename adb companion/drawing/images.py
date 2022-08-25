@@ -5,7 +5,7 @@ dir = 'resources'
 
 def load(name):
     imagepath = path.join(dir, name)
-    return pe.image(imagepath)
+    return pe.Image(imagepath)
 
 images = {
     'waitplug': load('waitplug.png'),

@@ -18,14 +18,14 @@ def init_texts(SS, using_id=None):
     bootables.clear()
     flashables.clear()
     installables.clear()
-    texts['reboot'] = pe.text.make("Restart.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
-    texts['bootloader'] = pe.text.make("Bootloader.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
-    texts['recovery'] = pe.text.make("Recovery.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
-    texts['unlockboot'] = pe.text.make("Unlock bootloader", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
-    texts['lockboot'] = pe.text.make("Relock bootloader", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
+    texts['reboot'] = pe.text.Text("Restart.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
+    texts['bootloader'] = pe.text.Text("Bootloader.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
+    texts['recovery'] = pe.text.Text("Recovery.", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
+    texts['unlockboot'] = pe.text.Text("Unlock bootloader", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
+    texts['lockboot'] = pe.text.Text("Relock bootloader", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
     
-    texts['SDUNIT_/'] = pe.text.make("ROOT", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
-    texts['SDUNIT_/SD'] = pe.text.make("SDCARD", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).texto
+    texts['SDUNIT_/'] = pe.text.Text("ROOT", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
+    texts['SDUNIT_/SD'] = pe.text.Text("SDCARD", font, int(SS[0]/60), (0, 0), [colorpallet['text'], None]).obj
     
     if not os.path.exists('user/flash/'): return
 
@@ -34,14 +34,14 @@ def init_texts(SS, using_id=None):
         if using_id and phone != using_id: continue
         for file in os.listdir(f'user/flash/{phone}/'):
             if file.endswith('.zip'):
-                texts[f'push {file}'] = pe.text.make(f"Push {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
+                texts[f'push {file}'] = pe.text.Text(f"Push {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).obj
                 flashables[file] = f'"user/flash/{phone}/{file}"'
                 continue
             elif file.endswith('.apk'):
-                texts[f'install {file}'] = pe.text.make(f"Install {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
+                texts[f'install {file}'] = pe.text.Text(f"Install {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).obj
                 installables[file] = f'"user/flash/{phone}/{file}"'
                 continue
             elif not file.endswith('.img'): continue
-            #texts[f'flash {file}'] = pe.text.make(f"Flash {file}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
-            texts[f'boot {file}'] = pe.text.make(f"Boot {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).texto
+            #texts[f'flash {file}'] = pe.text.Text(f"Flash {file}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).obj
+            texts[f'boot {file}'] = pe.text.Text(f"Boot {remove_ext(file)}", font, int(SS[0] / 60), (0, 0), [colorpallet['text'], None]).obj
             bootables[file] = f'"user/flash/{phone}/{file}"'

@@ -14,7 +14,7 @@ SDUNIT = '/sdcard/'
 
 def details(phone):
     if phone.textbox:
-        pe.display.blit.rect(phone.textbox, (
+        pe.display.blit(phone.textbox, (
             screenSize[0] / 2 - phone.textbox.get_width() / 2,
             screenSize[1] - screenSize[1] / 4 - phone.textbox.get_width() / 2,
         ))
@@ -43,16 +43,16 @@ while True:
     pe.fill.full(colorpallet['background'])
 
     if screen == 0:
-        centered_box(images['waitplug'].rect, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
+        centered_box(images['waitplug'].size, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
         centered_image(images['waitplug'])
         phones = check_connections(ADB)
         if len(phones) < 1: phones = check_connections(FASTBOOT)
         if len(phones) > 0:
             for phone in phones:
                 phone.texts = {}
-                phone.texts['name'] = pe.text.make(phone.name, font, int(screenSize[0]/30), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
-                phone.texts['brand'] = pe.text.make(phone.brand, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
-                phone.texts['mode'] = pe.text.make(phone.mode, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).texto
+                phone.texts['name'] = pe.text.Text(phone.name, font, int(screenSize[0]/30), (0, 0), [colorpallet['text'], colorpallet['background']]).obj
+                phone.texts['brand'] = pe.text.Text(phone.brand, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).obj
+                phone.texts['mode'] = pe.text.Text(phone.mode, font, int(screenSize[0]/50), (0, 0), [colorpallet['text'], colorpallet['background']]).obj
             init_texts(screenSize, phones[currentPhone].id)
             if phones[currentPhone].mode in ADB_MODES:
                 screen = 1
@@ -79,7 +79,7 @@ while True:
     elif screen == 3:
         phone = phones[currentPhone]
 
-        centered_box(images['phone_adb'].rect, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
+        centered_box(images['phone_adb'].size, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
         centered_image(images['phone_adb'])
 	
         # Control SD UNIT
@@ -87,35 +87,35 @@ while True:
         x, y = screenSize[0] - screenSize[0] / 3, 50
 
         pe.button.rect((x, y, texts['SDUNIT_/'].get_width()+6, texts['SDUNIT_/'].get_height()+6), colorpallet['foreground-veryactive'] if SDUNIT == '/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/')
-        pe.display.blit.rect(texts['SDUNIT_/'], (x + 3, y + 3))
+        pe.display.blit(texts['SDUNIT_/'], (x + 3, y + 3))
         x += texts['SDUNIT_/'].get_width() + 8
         pe.button.rect((x, y, texts['SDUNIT_/SD'].get_width()+6, texts['SDUNIT_/SD'].get_height()+6), colorpallet['foreground-veryactive'] if SDUNIT == '/sdcard/' else colorpallet['foreground'], colorpallet['foreground-active'], None, SETSDUNIT, '/sdcard/')
-        pe.display.blit.rect(texts['SDUNIT_/SD'], (x + 3, y + 3))
+        pe.display.blit(texts['SDUNIT_/SD'], (x + 3, y + 3))
 
         #
 	
         x, y = 50, 50
         for item in list(buttons.adb):
             pe.button.rect((x, y, texts[item].get_width()+6, texts[item].get_height()+6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.adb[item])
-            pe.display.blit.rect(texts[item], (x + 3, y + 3))
+            pe.display.blit(texts[item], (x + 3, y + 3))
             y += texts[item].get_height()+8
         files = phone.list_files(SDUNIT, False)
         x, y = screenSize[0] - screenSize[0] / 3, 75
         for item in list(flashables):
             rect = (x, y, texts[f'push {item}'].get_width() + 6, texts[f'push {item}'].get_height() + 6)
             pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'push {flashables[item]} {SDUNIT}')
-            pe.display.blit.rect(texts[f'push {item}'], (x + 3, y + 3))
+            pe.display.blit(texts[f'push {item}'], (x + 3, y + 3))
             if f'{SDUNIT}{item}' in files:
-                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
+                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.colors.white, pe.colors.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
             y += texts[f'push {item}'].get_height() + 8
         pe.draw.line(colorpallet['redline'], (x, y), (screenSize[0], y), 1)
         y += 8
         for item in list(installables):
             rect = (x, y, texts[f'install {item}'].get_width() + 6, texts[f'install {item}'].get_height() + 6)
             pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'install {installables[item]}')
-            pe.display.blit.rect(texts[f'install {item}'], (x + 3, y + 3))
+            pe.display.blit(texts[f'install {item}'], (x + 3, y + 3))
             if f'{SDUNIT}{item}' in files:
-                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.color.white, pe.color.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
+                pe.button.rect(((x - rect[3])-6, y, rect[3], rect[3]), pe.colors.white, pe.colors.red, None, phone.delete_file, f'"{SDUNIT}{item}"')
             y += texts[f'install {item}'].get_height() + 8
 
         details(phone)
@@ -123,19 +123,19 @@ while True:
     elif screen == 4:
         phone = phones[currentPhone]
 
-        centered_box(images['phone_fastboot'].rect, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
+        centered_box(images['phone_fastboot'].size, colorpallet['foreground'], colorpallet['foreground-shadow'], 5)
         centered_image(images['phone_fastboot'])
 
         x, y = 50, 50
         for item in list(buttons.fastboot):
             pe.button.rect((x, y, texts[item].get_width() + 6, texts[item].get_height() + 6), colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, buttons.fastboot[item])
-            pe.display.blit.rect(texts[item], (x + 3, y + 3))
+            pe.display.blit(texts[item], (x + 3, y + 3))
             y += texts[item].get_height() + 8
         x, y = screenSize[0]-screenSize[0]/3, 50
         for item in list(bootables):
             rect = (x, y, texts[f'boot {item}'].get_width() + 6, texts[f'boot {item}'].get_height() + 6)
             pe.button.rect(rect, colorpallet['foreground'], colorpallet['foreground-active'], None, phone.command, f'boot {bootables[item]}')
-            pe.display.blit.rect(texts[f'boot {item}'], (x + 3, y + 3))
+            pe.display.blit(texts[f'boot {item}'], (x + 3, y + 3))
             y += texts[f'boot {item}'].get_height() + 8
 
         details(phone)
