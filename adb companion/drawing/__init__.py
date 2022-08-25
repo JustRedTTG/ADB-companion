@@ -1,6 +1,15 @@
 import pygameextra as pe
 pe.init()
 
+try:
+    pe.__version__
+except:
+    pe.__version__ = 'null'
+
+if pe.__version__ != '1.6.5.2':
+    print("Sorry, but the software isn't compatible with your pygameextra version.")
+    exit()
+
 screenSize = (800, 600)
 pe.display.make(screenSize, "ADB companion")
 
